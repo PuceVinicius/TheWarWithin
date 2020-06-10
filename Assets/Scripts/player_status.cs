@@ -1,11 +1,13 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 public class player_status : MonoBehaviour
 {
 
 	public bool debug_mode = false;
+    public GameObject Inventory;
 
 	// ###########################################################
 	// 							Emotions
@@ -51,22 +53,31 @@ public class player_status : MonoBehaviour
 	// 						    Inventory
 	// ###########################################################
 
-	private Inventory inventory;
+	public bool is_inventory_open = false;
 
     // Start is called before the first frame update
     void Start() {
+		Inventory.SetActive(is_inventory_open);
 	}
-
-	void Awake() {
-		inventory = new Inventory();
-	}
-
 
     // Update is called once per frame
     void Update() {
         if (Input.GetButtonDown("Debug Activation")) {
         	debug_mode = !debug_mode;
         }
+
+		if (Input.GetButtonDown("Inventory")) {
+			Inventory.SetActive(!Inventory.activeSelf);
+			if (Inventory.activeSelf) {
+				Cursor.lockState = CursorLockMode.Confined;
+				is_inventory_open = true;
+				Cursor.visible = true;
+			}
+			else {
+				is_inventory_open = false;
+				Cursor.lockState = CursorLockMode.Locked;
+			}
+		}
 
 		joy -= joy_dec_rate * Time.deltaTime;
 		fear -= fear_dec_rate * Time.deltaTime;
