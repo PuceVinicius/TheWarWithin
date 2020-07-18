@@ -5,23 +5,34 @@ using UnityEngine;
 public class player_movement : MonoBehaviour
 {
 
+
 	public CharacterController controller;
 
-	public float speed = 12f;
+	public float speed = 6f;
 	public float gravity = -9.81f;
 	public float jump_height = 3f;
+    public float run_multiplier = 2f;
 
 	public Transform ground_check;
 	public float ground_distance = 0.4f;
 	public LayerMask ground_mask;
 
 	Vector3 velocity;
-	bool is_grounded;
+	public bool is_grounded;
     public player_status player;
+
+    public Inventory inventory;
 
     // Start is called before the first frame update
     void Start()
     {
+    }
+
+    private void OnControllerColliderHit(ControllerColliderHit hit) {
+        IInventoryItem item = hit.collider.GetComponent<IInventoryItem>();
+        if (item != null) {
+            inventory.AddItem(item);
+        }
     }
 
     // Update is called once per frame
@@ -39,7 +50,11 @@ public class player_movement : MonoBehaviour
 
             Vector3 move = transform.right * x + transform.forward * z;
 
-            controller.Move(move * speed * Time.deltaTime);
+            if (Input.GetAxis("Fire3") > 0) 
+                    controller.Move(move * speed * Time.deltaTime * run_multiplier);
+            else    controller.Move(move * speed * Time.deltaTime);
+
+            
         }
 
         if(Input.GetButtonDown("Jump") && is_grounded) {
