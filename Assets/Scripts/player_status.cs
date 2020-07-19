@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.HighDefinition;
+using UnityEngine.SceneManagement;
 
 public class player_status : MonoBehaviour
 {
@@ -93,6 +94,9 @@ public class player_status : MonoBehaviour
     float AngerQ;
     float SadnessQ;
     float DisgustQ;
+    float BathroomQ;
+    float SleepQ;
+    float FatigueQ;
 
     // Start is called before the first frame update
     void Start() {
@@ -102,6 +106,11 @@ public class player_status : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
+
+		if (fatigue >= 95f) {
+			SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            Cursor.lockState = CursorLockMode.None;
+		}
 
 		UpdateGlobalShader();
 
@@ -147,6 +156,9 @@ public class player_status : MonoBehaviour
 	public void angerQueue(float value) {AngerQ += value;}
 	public void sadnessQueue(float value) {SadnessQ += value;}
 	public void disgustQueue(float value) {DisgustQ += value;}
+	public void bathroomQueue(float value) {BathroomQ += value;}
+	public void sleepQueue(float value) {SleepQ += value;}
+	public void fatigueQueue(float value) {FatigueQ += value;}
 
 	void UpdateQueue() {
 		tempo = ratioQ * Time.deltaTime;
@@ -198,6 +210,36 @@ public class player_status : MonoBehaviour
 			else {
 				disgust -= tempo;
 				DisgustQ += tempo;
+			}
+		}
+		if (Mathf.Abs(BathroomQ) >= ratioQ) {
+			if (BathroomQ > 0) {
+				bathroom += tempo;
+				BathroomQ -= tempo;
+			}
+			else {
+				bathroom -= tempo;
+				BathroomQ += tempo;
+			}
+		}
+		if (Mathf.Abs(SleepQ) >= ratioQ) {
+			if (SleepQ > 0) {
+				sleep += tempo;
+				SleepQ -= tempo;
+			}
+			else {
+				sleep -= tempo;
+				SleepQ += tempo;
+			}
+		}
+		if (Mathf.Abs(FatigueQ) >= ratioQ) {
+			if (FatigueQ > 0) {
+				fatigue += tempo;
+				FatigueQ -= tempo;
+			}
+			else {
+				fatigue -= tempo;
+				FatigueQ += tempo;
 			}
 		}
 	}
