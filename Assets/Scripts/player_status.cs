@@ -323,11 +323,12 @@ public class player_status : MonoBehaviour
 		if (disgust >= disgust_min) {
 			float disgustBase = Mathf.Clamp(disgust, disgust_min, disgust_max);
 
-			float bng = EmotionToValue(disgustBase, disgust_min, disgust_max, 1f, 0.75f);
-			base1 = new Color(bng, 1f, bng);
+			float bng = EmotionToValue(disgustBase, disgust_min, disgust_max, 1f, 0.54f);
+			float bng2 = EmotionToValue(disgustBase, disgust_min, disgust_max, 1f, 0.67f);
+			base1 = new Color(bng, bng2, bng);
 			global_shader.UpdateColorAdjustment(0f, 0f, base1, 0f, 0f, true);
 		
-			float intensity = EmotionToValue(disgustBase, disgust_min, disgust_max, 0f, -0.6f);
+			float intensity = EmotionToValue(disgustBase, disgust_min, disgust_max, 0f, -0.4f);
 			global_shader.UpdateLensDistortion(intensity);
 		}
 	}
